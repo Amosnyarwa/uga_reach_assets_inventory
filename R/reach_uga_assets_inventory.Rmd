@@ -37,11 +37,60 @@ df_assets_data %>%
 ```
 
 
-## Number of items by type
+## Number of items by type and brand
 
 ```{r, echo = FALSE}
 df_assets_data %>% 
-   group_by(item_brand) %>% 
-   summarise(number_of_items_by_brand = n()) %>% 
+   group_by(item_type, item_brand) %>% 
+   summarise(number_of_items = n()) %>% 
    DT::datatable()
 ```
+
+## Number of items by type brand and model
+
+```{r, echo = FALSE}
+df_assets_data %>% 
+   group_by(item_type, item_brand, item_model) %>% 
+   summarise(number_of_items = n()) %>% 
+   DT::datatable()
+```
+
+<!-- ## Item physical appearance by type -->
+
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>%  -->
+<!--    group_by(item_type, phy_app) %>%  -->
+<!--    summarise(number_of_items = n()) %>%  -->
+<!--    DT::datatable() -->
+<!-- ``` -->
+
+<!-- ## Item physical appearance by type and brand -->
+
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>%  -->
+<!--    group_by(item_type, item_brand, phy_app) %>%  -->
+<!--    summarise(number_of_items = n()) %>%  -->
+<!--    DT::datatable() -->
+<!-- ``` -->
+
+<!-- ## Item physical appearance by type -->
+
+## Number of items by state
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, item_state) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
+## Number of items by state_observe
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, item_state_observe) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
+
