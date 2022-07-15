@@ -93,4 +93,40 @@ df_assets_data %>%
    DT::datatable()
 ```
 
+## Maps.me functionality of the item
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, maps_me_funct) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
+## Item screen touch functionality
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, screen_touch) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
+## Item battery functionality
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, battery) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
+## Item internet functionality
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, internet) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
 
