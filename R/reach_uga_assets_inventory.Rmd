@@ -19,7 +19,7 @@ library(lubridate)
 library(glue)
 
 # read data
-df_assets_data <- readxl::read_excel("../inputs/REACH_UGA_Phone_inventory_tool_Finalized.xlsx") %>% 
+df_assets_data <- readxl::read_excel("../inputs/REACH_UGA_Phone_inventory_tool_Finalized_Data.xlsx") %>% 
   mutate(uuid = `_uuid`,
          start_date = as_date(start),
          start = as_datetime(start),
@@ -106,16 +106,25 @@ df_assets_data %>%
 
 ```{r, echo = FALSE}
 df_assets_data %>%
-   group_by(item_type, screen_touch) %>%
+   group_by(item_type, screen_touch, screen_touch_observe) %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
+
+<!-- ## Item screen touch observe -->
+
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, screen_touch_observe) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
 ## Item battery functionality
 
 ```{r, echo = FALSE}
 df_assets_data %>%
-   group_by(item_type, battery) %>%
+   group_by(item_type, battery, battery_observe) %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
@@ -124,9 +133,19 @@ df_assets_data %>%
 
 ```{r, echo = FALSE}
 df_assets_data %>%
-   group_by(item_type, internet) %>%
+   group_by(item_type, internet, internet_observe) %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
+
+## Item GPS functionality
+
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, gps_function, gps_funct) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
+
 
 
