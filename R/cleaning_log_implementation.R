@@ -5,7 +5,7 @@ library(lubridate)
 
 # read the data
 df_cleaning_log <- readxl::read_excel("inputs/20220720_combined_logic_spatial_and_others_checks.xlsx") %>% 
-  filter(adjust_log != "delete_log", !is.na(value), !is.na(uuid)) %>%  
+  filter(!adjust_log %in% c("delete_log"), !is.na(value), !is.na(uuid)) %>%  
   mutate(sheet = NA, index = NA, relevant = NA)
 df_raw_data <- readxl::read_excel("inputs/REACH_UGA_Phone_inventory_tool_Finalized_Data.xlsx")
 df_survey <- readxl::read_excel("inputs/REACH_UGA_Phone_inventory_tool_Finalized.xlsx", sheet = "survey") 
