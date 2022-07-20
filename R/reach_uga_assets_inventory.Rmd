@@ -1,7 +1,7 @@
 ---
 title: "UGA_REACH_Phone_inventory"
 author: "Amos Nyarwaya"
-date: "7/13/2022"
+date: "7/20/2022"
 output: 
    html_document:
      toc: true
@@ -20,14 +20,16 @@ library(glue)
 library(scales)
 
 # read data
-df_assets_data <- readxl::read_excel("../inputs/20220720_clean_data.xlsx") %>% 
+df_assets_data <- readxl::read_excel("../inputs/clean_data.xlsx") %>% 
   mutate(start_date = as_date(start),
          start = as_datetime(start),
-         end = as_datetime(end))
+         end = as_datetime(end),
+         usability_status = case_when(screen_touch == "yes" & battery == "yes" & internet == "yes" & maps_me_funct == "yes" & gps_function == "yes" ~ "good",
+                                      TRUE ~ "bad"))
 
 ```
 
-## Number of items by type
+## Number of items checked by type
 
 ```{r, echo = FALSE}
 df_assets_data %>% 
@@ -37,7 +39,7 @@ df_assets_data %>%
 ```
 
 
-## Number of items by type and brand
+## Number of items checked by type and brand
 
 ```{r, echo = FALSE}
 df_assets_data %>% 
@@ -46,14 +48,14 @@ df_assets_data %>%
    DT::datatable()
 ```
 
-## Number of items by type brand and model
+<!-- ## Number of items checked by type brand and model -->
 
-```{r, echo = FALSE}
-df_assets_data %>% 
-   group_by(item_type, item_brand, item_model) %>% 
-   summarise(number_of_items = n()) %>% 
-   DT::datatable()
-```
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>%  -->
+<!--    group_by(item_type, item_brand, item_model) %>%  -->
+<!--    summarise(number_of_items = n()) %>%  -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
 <!-- ## Item physical appearance by type -->
 
@@ -64,16 +66,16 @@ df_assets_data %>%
 <!--    DT::datatable() -->
 <!-- ``` -->
 
-## Item physical appearance by type and brand
+<!-- ## Item physical appearance by type and brand -->
 
-```{r, echo = FALSE}
-df_assets_data %>%
-   group_by(item_type, item_brand, phy_app, phy_app_observe) %>%
-   summarise(number_of_items = n()) %>%
-   DT::datatable()
-```
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, item_brand, phy_app, phy_app_observe) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
-## Number of items by state
+## Reported number of items checked by state
 
 ```{r, echo = FALSE}
 df_assets_data %>%
@@ -82,32 +84,71 @@ df_assets_data %>%
    DT::datatable()
 ```
 
-## Number of items by state_observe
+## Reported number of items checked by state and brand
 
 ```{r, echo = FALSE}
 df_assets_data %>%
-   group_by(item_type, item_state_observe) %>%
+   group_by(item_type, item_brand, item_state) %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
 
-## Maps.me functionality of the item
+## Actual number of usable items
+
+This is based on functionality of screen touch, battery, internet, maps.me and GPS
+
+```{r, echo = FALSE}
+df_usable_assets <- df_assets_data %>%
+   group_by(usability_status) %>%
+   summarise(number_of_items = n())
+
+usability_good <- df_usable_assets %>% filter(usability_status == "good")
+usability_bad <- df_usable_assets %>% filter(usability_status == "bad")
+```
+
+>Usable items: **`r usability_good$number_of_items`** \
+Non usable Items: **`r usability_bad$number_of_items`**.
+
+### Usable items by type
 
 ```{r, echo = FALSE}
 df_assets_data %>%
-   group_by(item_type, maps_me_funct) %>%
+   group_by(item_type, usability_status) %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
 
-## Item screen touch functionality
+### Actual number of usable items by type and brand 
 
 ```{r, echo = FALSE}
 df_assets_data %>%
-   group_by(item_type, screen_touch, screen_touch_observe) %>%
+   group_by(item_type, item_brand, usability_status) %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
+
+
+
+
+
+
+<!-- ## Maps.me functionality of the item -->
+
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, maps_me_funct) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
+
+<!-- ## Item screen touch functionality -->
+
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, screen_touch, screen_touch_observe) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
 <!-- ## Item screen touch observe -->
 
@@ -118,30 +159,30 @@ df_assets_data %>%
 <!--    DT::datatable() -->
 <!-- ``` -->
 
-## Item battery functionality
+<!-- ## Item battery functionality -->
 
-```{r, echo = FALSE}
-df_assets_data %>%
-   group_by(item_type, battery, battery_observe) %>%
-   summarise(number_of_items = n()) %>%
-   DT::datatable()
-```
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, battery, battery_observe) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
-## Item internet functionality
+<!-- ## Item internet functionality -->
 
-```{r, echo = FALSE}
-df_assets_data %>%
-   group_by(item_type, internet, internet_observe) %>%
-   summarise(number_of_items = n()) %>%
-   DT::datatable()
-```
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, internet, internet_observe) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
-## Item GPS functionality
+<!-- ## Item GPS functionality -->
 
-```{r, echo = FALSE}
-df_assets_data %>%
-   group_by(item_type, gps_function, gps_funct) %>%
-   summarise(number_of_items = n()) %>%
-   DT::datatable()
-```
+<!-- ```{r, echo = FALSE} -->
+<!-- df_assets_data %>% -->
+<!--    group_by(item_type, gps_function, gps_funct) %>% -->
+<!--    summarise(number_of_items = n()) %>% -->
+<!--    DT::datatable() -->
+<!-- ``` -->
 
