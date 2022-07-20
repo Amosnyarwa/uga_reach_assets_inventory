@@ -17,11 +17,11 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 library(tidyverse)
 library(lubridate)
 library(glue)
+library(scales)
 
 # read data
-df_assets_data <- readxl::read_excel("../inputs/REACH_UGA_Phone_inventory_tool_Finalized_Data.xlsx") %>% 
-  mutate(uuid = `_uuid`,
-         start_date = as_date(start),
+df_assets_data <- readxl::read_excel("../inputs/20220720_clean_data.xlsx") %>% 
+  mutate(start_date = as_date(start),
          start = as_datetime(start),
          end = as_datetime(end))
 
@@ -64,16 +64,14 @@ df_assets_data %>%
 <!--    DT::datatable() -->
 <!-- ``` -->
 
-<!-- ## Item physical appearance by type and brand -->
+## Item physical appearance by type and brand
 
-<!-- ```{r, echo = FALSE} -->
-<!-- df_assets_data %>%  -->
-<!--    group_by(item_type, item_brand, phy_app) %>%  -->
-<!--    summarise(number_of_items = n()) %>%  -->
-<!--    DT::datatable() -->
-<!-- ``` -->
-
-<!-- ## Item physical appearance by type -->
+```{r, echo = FALSE}
+df_assets_data %>%
+   group_by(item_type, item_brand, phy_app, phy_app_observe) %>%
+   summarise(number_of_items = n()) %>%
+   DT::datatable()
+```
 
 ## Number of items by state
 
@@ -146,6 +144,4 @@ df_assets_data %>%
    summarise(number_of_items = n()) %>%
    DT::datatable()
 ```
-
-
 
