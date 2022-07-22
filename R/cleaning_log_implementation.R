@@ -64,7 +64,10 @@ kbo_modified <- kobold::kobold(survey = df_survey,
                                choices = df_choises_modified, 
                                data = df_raw_data_modified, 
                                cleaning = df_cleaning_log )
-kbo_cleaned<- kobold::kobold_cleaner(kbo_modified) %>% 
+kbo_cleaned<- kobold::kobold_cleaner(kbo_modified)
+  
+
+df_cleaned_data <- kbo_cleaned$data %>% 
   mutate(
     usability_status = case_when(screen_touch == "yes" & battery == "yes" & internet == "yes" & maps_me_funct == "yes" & gps_function == "yes" ~ "good",
                                  TRUE ~ "bad")
@@ -72,4 +75,4 @@ kbo_cleaned<- kobold::kobold_cleaner(kbo_modified) %>%
 
 # write final modified data -----------------------------------------------------
 
-write_csv(kbo_cleaned$data,file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data.csv"))
+write_csv(df_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data.csv"))
