@@ -64,7 +64,11 @@ kbo_modified <- kobold::kobold(survey = df_survey,
                                choices = df_choises_modified, 
                                data = df_raw_data_modified, 
                                cleaning = df_cleaning_log )
-kbo_cleaned<- kobold::kobold_cleaner(kbo_modified)
+kbo_cleaned<- kobold::kobold_cleaner(kbo_modified) %>% 
+  mutate(
+    usability_status = case_when(screen_touch == "yes" & battery == "yes" & internet == "yes" & maps_me_funct == "yes" & gps_function == "yes" ~ "good",
+                                 TRUE ~ "bad")
+  )
 
 # write final modified data -----------------------------------------------------
 
